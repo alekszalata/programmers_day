@@ -22,8 +22,8 @@ task createDockerfile(type: Dockerfile) {
     copyFile 'requirements.txt', './'
     runCommand 'pip install -r requirements.txt'
     copyFile '.', '.'
-    exposePort 22222
-    defaultCommand 'python3', 'manage.py', 'runserver', '--noreload', '127.0.0.1:22222'
+    exposePort 80
+    defaultCommand 'python3', 'manage.py', 'runserver', '--noreload', '0.0.0.0:80'
 
 }
 
@@ -36,7 +36,7 @@ task buildMyAppImage(type: DockerBuildImage) {
 task createMyAppContainer(type: DockerCreateContainer) {
     dependsOn buildMyAppImage
     targetImageId buildMyAppImage.getImageId()
-    hostConfig.portBindings = ['22222:22222']
+    hostConfig.portBindings = ['80:80']
     hostConfig.autoRemove = true
 }
 

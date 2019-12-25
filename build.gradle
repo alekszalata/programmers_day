@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:6.1.1'
+    }
+}
+
+apply plugin: 'com.bmuschko.docker-remote-api'
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
+import com.bmuschko.gradle.docker.DockerRegistryCredentials
+import com.bmuschko.gradle.docker.tasks.container.*
+import com.bmuschko.gradle.docker.tasks.image.*
+
+
+task createDockerfile(type: Dockerfile) {
+    destFile = project.file("./Dockerfile")
+    from 'python:latest'
+    copyFile 'requirements.txt', './'
+    runCommand 'pip install -r requirements.txt'
+    copyFile '.', '.'
+    exposePort 22222
+    defaultCommand 'python3', 'manage.py', 'runserver', '--noreload', '127.0.0.1:22222'
+
+}
+
+task buildMyAppImage(type: DockerBuildImage) {
+    dependsOn createDockerfile
+    inputDir = file('.')
+    images.add('test/prog_service')
+}
+
+task createMyAppContainer(type: DockerCreateContainer) {
+    dependsOn buildMyAppImage
+    targetImageId buildMyAppImage.getImageId()
+    hostConfig.portBindings = ['22222:22222']
+    hostConfig.autoRemove = true
+}
+
+task startService(type: DockerStartContainer) {
+    dependsOn createMyAppContainer
+    targetContainerId createMyAppContainer.getContainerId()
+}
+
+

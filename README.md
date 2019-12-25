@@ -2,13 +2,13 @@
 
 Service for searching 256 day in a ceratin year!
 
-To build run: 
+To start service you should run this commands in terminal: 
 
 * git clone https://github.com/alekszalata/programmers_day.git
 
 * gradle startService
 
-possible addresses:
+Possible addresses:
 
 http://127.0.0.1:80/?year=Value 
 

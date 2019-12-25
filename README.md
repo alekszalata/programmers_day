@@ -4,15 +4,15 @@ Service for searching 256 day in a ceratin year!
 
 To build run: 
 
-*git clone https://github.com/alekszalata/programmers_day.git
+* git clone https://github.com/alekszalata/programmers_day.git
 
-*gradle startService
+* gradle startService
 
 possible addresses:
 
 http://127.0.0.1:80/?year=Value 
 
-Instead Value you can put any years
+Instead Value you can put any year
 
 Examples:
 

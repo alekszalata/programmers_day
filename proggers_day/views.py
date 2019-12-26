@@ -11,7 +11,6 @@ def programmers_day(request):
         if request.method == "GET":
             weekday_num = 0
             month_num = 0
-            date = 0
             days = 256
             year = int(request.GET.get('year'))
             for i in range(1, 12):
@@ -24,7 +23,7 @@ def programmers_day(request):
                     month_num = i
                     break
             json_pack = JsonResponse({'errorCode': status.HTTP_200_OK,
-                                      'dataMessage': f"{days}/{month_num}/{year} and it is the {weekday_num} of the week"})
+                                      'dataMessage': f"{days}/{month_num}/{year} and it is the {weekday_num} day of the week"})
             return json_pack
     except ValueError as e:
         return Response(e.args[0], status.HTTP_400_BAD_REQUEST)
